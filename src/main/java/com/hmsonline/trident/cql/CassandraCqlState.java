@@ -40,20 +40,26 @@ public class CassandraCqlState implements State {
     @Override
     public void commit(Long txid) {
         LOG.debug("Commiting [{}]", txid);
-        BatchStatement batch = new BatchStatement(batchType);
-        batch.setConsistencyLevel(batchConsistencyLevel);
-        int i = 0;
-        for(Statement statement : this.statements) {
-            batch.add(statement);
-            i++;
-            if(i >= this.maxBatchSize) {
-                clientFactory.getSession().execute(batch);
-                batch = new BatchStatement(batchType);
-                i = 0;
+        if (this.maxBatchSize == 1) {
+            for(Statement statement : this.statements) {
+                clientFactory.getSession().execute(statement);
             }
-        }
-        if(i > 0) {
-            clientFactory.getSession().execute(batch);
+        } else {
+            BatchStatement batch = new BatchStatement(batchType);
+            batch.setConsistencyLevel(batchConsistencyLevel);
+            int i = 0;
+            for(Statement statement : this.statements) {
+                batch.add(statement);
+                i++;
+                if(i >= this.maxBatchSize) {
+                    clientFactory.getSession().execute(batch);
+                    batch = new BatchStatement(batchType);
+                    i = 0;
+                }
+            }
+            if(i > 0) {
+                clientFactory.getSession().execute(batch);
+            }
         }
         this.statements.clear();
     }
