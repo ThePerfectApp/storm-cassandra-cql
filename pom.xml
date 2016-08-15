@@ -9,7 +9,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.hmsonline</groupId>
 	<artifactId>storm-cassandra-cql</artifactId>
-	<version>0.3.11.tpa-SNAPSHOT</version>
+	<version>0.3.11.tpa</version>
 	<name>Storm Cassandra CQL Support</name>
 	<description>Storm Cassandra CQL Support</description>
 
@@ -89,6 +89,7 @@
 			<groupId>org.cassandraunit</groupId>
 			<artifactId>cassandra-unit</artifactId>
 			<version>3.0.0.1</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
